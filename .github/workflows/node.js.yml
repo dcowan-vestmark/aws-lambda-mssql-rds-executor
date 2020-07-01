@@ -27,7 +27,10 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - uses: actions/upload-artifact@v2
+    - run: mkdir -p ./artifacts
+    - run: zip -r ./artifacts/aws-lambda-mssql-rds-executor.zip ./
+    - uses: actions/upload-release-asset@v1
       with:
         name: aws-lambda-mssql-rds-executor
-        path: ./node_modules/**/*
+        path: ./artifacts/aws-lambda-mssql-rds-executor.zip
+
