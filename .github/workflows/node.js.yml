@@ -29,5 +29,5 @@ jobs:
     - run: npm test
     - uses: actions/upload-artifact@v2
       with:
-        name: aws-lambda-mssql-rds-executor.zip
-        path: ./
+        name: aws-lambda-mssql-rds-executor
+        path: ./node_modules/**/*
