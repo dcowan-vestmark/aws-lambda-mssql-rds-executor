@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,8 +27,7 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - run: mkdir -p ./artifacts
-    - run: zip -r ./artifacts/aws-lambda-mssql-rds-executor.zip ./
     - uses: actions/upload-artifact@v2
       with:
-        path: artifacts/aws-lambda-mssql-rds-executor.zip
+        name: aws-lambda-mssql-rds-executor.zip
+        path: ./
