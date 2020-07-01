@@ -27,8 +27,8 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - run: mkdir -p ./artifacts/${{ github.repository }}
-    - run: zip -r ./artifacts/${{ github.repository }}.zip ./
+    - run: mkdir -p ./artifacts
+    - run: zip -r ./artifacts/aws-lambda-mssql-rds-executor.zip ./
     - uses: actions/upload-artifact@v2
       with:
-        path: artifacts/${{ github.repository }}.zip
+        path: artifacts/aws-lambda-mssql-rds-executor.zip
