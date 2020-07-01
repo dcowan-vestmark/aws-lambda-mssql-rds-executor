@@ -31,7 +31,6 @@ jobs:
     - run: mkdir -p ./artifacts/${{ github.repository }}
     - name: Create Zip File
     - run: zip -r ./artifacts/${{ github.repository }}.zip ./
-
     - uses: actions/upload-artifact@v2
       with:
         name: zip
