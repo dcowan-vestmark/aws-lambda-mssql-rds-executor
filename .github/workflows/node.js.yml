@@ -27,12 +27,11 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - name: Make artifact directory
-        run: mkdir -p ./artifacts/${{ github.repository }}
+    - name: Make zip dir
+    - run: mkdir -p ./artifacts/${{ github.repository }}
     - name: Create Zip File
-        uses: montudor/action-zip@v0.1.0
-        with:
-        args: zip -r ./artifacts/${{ github.repository }}.zip ./
+    - run: zip -r ./artifacts/${{ github.repository }}.zip ./
+
     - uses: actions/upload-artifact@v2
       with:
         name: zip
