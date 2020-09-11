@@ -32,5 +32,5 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: aws-lambda-mssql-rds-executor
-        path: ./artifacts/aws-lambda-mssql-rds-executor.zip
+        path: ./artifacts/aws-lambda-mssql-rds-executor-${{ env.GITHUB_RUN_NUMBER }}.zip
 
