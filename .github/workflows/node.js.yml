@@ -27,7 +27,8 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - run: export
+    - run: echo ${{ env.GITHUB_RUN_NUMBER}}
+    - run: echo ${GITHUB_RUN_NUMBER}
     - run: mkdir -p ./artifacts
     - run: zip -r ./artifacts/aws-lambda-mssql-rds-executor-${{ env.GITHUB_RUN_NUMBER }}.zip ./ -x ".github/*" .gitignore ".git/*"
     - uses: actions/upload-artifact@v2
