@@ -8,12 +8,15 @@ const awsClient = new rds();
 exports.handler = async (event, context) => {
   console.log("Event=" + JSON.stringify(event));
 
-  var dbInstanceName = null;
+  var dbInstanceName;
   if (process.env.DB_INSTANCE_NAME) {
+	console.log("Using DB_INSTANCE_NAME env var");
 	dbInstanceName = process.env.DB_INSTANCE_NAME;
   }
 
-  if (dbInstanceName == null && event.EventSource == 'aws:sns') {
+  if (dbInstanceName == null && event.Records[0].EventSource == 'aws:sns') {
+	console.log("Getting database instance id from sns event");
+
 	const record = JSON.parse(event.Records[0].Sns.Message);
 
 	if (record["Event Source"] != "db-instance") {
