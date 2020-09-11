@@ -14,7 +14,7 @@ jobs:
     name: Build Job
     runs-on: ubuntu-latest
     env:
-      ARTIFACT_VERSION: 1.0.${{github.run_umber}}
+      ARTIFACT_VERSION: 1.0.${{ github.run_number }} 
     strategy:
       matrix:
         node-version: [12.x]
@@ -30,7 +30,7 @@ jobs:
     - run: npm test
     - run: echo $ARTIFACT_VERSION
     - run: mkdir -p ./artifacts
-    - run: zip -r ./artifacts/aws-lambda-mssql-rds-executor-${{github.run_umber}}.zip ./ -x ".github/*" .gitignore ".git/*"
+    - run: zip -r ./artifacts/aws-lambda-mssql-rds-executor-${{ github.run_number }}.zip ./ -x ".github/*" .gitignore ".git/*"
     - uses: actions/upload-artifact@v2
       with:
         name: aws-lambda-mssql-rds-executor
