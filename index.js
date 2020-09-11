@@ -10,23 +10,32 @@ exports.handler = async (event, context) => {
 
   var dbInstanceName;
   if (process.env.DB_INSTANCE_NAME) {
-	console.log("Using DB_INSTANCE_NAME env var");
-	dbInstanceName = process.env.DB_INSTANCE_NAME;
+    console.log("Using DB_INSTANCE_NAME env var");
+    dbInstanceName = process.env.DB_INSTANCE_NAME;
   }
 
-  if (dbInstanceName == null && event.Records[0].EventSource == 'aws:sns') {
-	console.log("Getting database instance id from sns event");
+  if (
+    dbInstanceName == null &&
+    event.Records &&
+    event.Records[0].EventSource == "aws:sns"
+  ) {
+    console.log("Getting database instance id from sns event");
 
-	const record = JSON.parse(event.Records[0].Sns.Message);
+    const record = JSON.parse(event.Records[0].Sns.Message);
 
-	if (record["Event Source"] != "db-instance") {
-	  console.log("Exiting due to no db-instance Event Source");
-	  context.fail("Exiting due to no db-instance Event Source");
-	  return;
-	}
-	dbInstanceName = record["Source ID"];
+    if (record["Event Source"] != "db-instance") {
+      console.log("Exiting due to no db-instance Event Source");
+      context.fail("Exiting due to no db-instance Event Source");
+      return;
+    }
+    dbInstanceName = record["Source ID"];
   }
- 
+
+  if (!dbInstanceName) {
+    context.fail("No db instance defined");
+    return;
+  }
+
   console.log("Requesting instance information for: " + dbInstanceName);
   var data = await awsClient
     .describeDBInstances({
@@ -35,8 +44,8 @@ exports.handler = async (event, context) => {
     .promise();
 
   if (data.DBInstances.length == 0) {
-	console.log("No DB Instance found");
-	context.fail("No DB Instance found");
+    console.log("No DB Instance found");
+    context.fail("No DB Instance found");
     return;
   }
 
@@ -57,7 +66,7 @@ exports.handler = async (event, context) => {
     const result = await sql.query(process.env.SQL_SCRIPT);
     console.dir(result);
   } catch (err) {
-	console.error("Error executing sql: " + err);
-	context.fail("Error executing sql: " + err);
+    console.error("Error executing sql: " + err);
+    context.fail("Error executing sql: " + err);
   }
 };
