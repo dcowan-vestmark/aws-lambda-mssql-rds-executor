@@ -7,18 +7,27 @@ const awsClient = new rds();
 
 exports.handler = async (event, context) => {
   console.log("Event=" + JSON.stringify(event));
-  const record = JSON.parse(event.Records[0].Sns.Message);
 
-  if (record["Event Source"] != "db-instance") {
-	console.log("Exiting due to no db-instance Event Source");
-	context.fail("Exiting due to no db-instance Event Source");
-    return;
+  var dbInstanceName = null;
+  if (process.env.DB_INSTANCE_NAME) {
+	dbInstanceName = process.env.DB_INSTANCE_NAME;
+  }
+
+  if (dbInstanceName == null && event.EventSource == 'aws:sns') {
+	const record = JSON.parse(event.Records[0].Sns.Message);
+
+	if (record["Event Source"] != "db-instance") {
+	  console.log("Exiting due to no db-instance Event Source");
+	  context.fail("Exiting due to no db-instance Event Source");
+	  return;
+	}
+	dbInstanceName = record["Source ID"];
   }
  
-  console.log("Requesting instance information for: " + record["Source ID"]);
+  console.log("Requesting instance information for: " + dbInstanceName);
   var data = await awsClient
     .describeDBInstances({
-      DBInstanceIdentifier: record["Source ID"],
+      DBInstanceIdentifier: dbInstanceName,
     })
     .promise();
 
