@@ -6,8 +6,8 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:dcowan-vestmark/aws-lambda-mssql-rds-executor.git"
-  },    
+  },
   "dependencies": {
-    "mssql": "~> 6.2.0"
+    "mssql": "^6.2.1"
   }
 }
