@@ -63,7 +63,7 @@ exports.handler = async (event, context) => {
     };
     console.log("connecting to " + instance.Endpoint.Address);
     await sql.connect(config);
-    const result = await sql.query(process.env.SQL_SCRIPT);
+    const result = await sql.query(Buffer.from(process.env.SQL_SCRIPT,'base64'));
     console.dir(result);
   } catch (err) {
     console.error("Error executing sql: " + err);
